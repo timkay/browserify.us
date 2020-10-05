@@ -8,12 +8,8 @@
     "url": "https://github.com/timkay/browserify.us.git"
   },
   "dependencies": {
-    "bezier": "^0.1.0",
-    "bezier-js": "^2.6.1",
     "browserify": "^16.5.2",
-    "express": "^4.17.1",
-    "undefined": "^0.1.0",
-    "variable": "0.0.8"
+    "express": "^4.17.1"
   },
   "devDependencies": {},
   "scripts": {

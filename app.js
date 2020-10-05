@@ -12,7 +12,10 @@ const usage = `Usage:
 	https://browserify.us/require/variable-name=npm-package-name
 `
 
-mkdirSync('data')
+try {
+	mkdirSync('data')
+} catch (e) {
+}
 
 
 app.get('/', (req, res) => {
@@ -23,23 +26,30 @@ app.get('/', (req, res) => {
 app.get('/require/:data', (req, res) => {
 	const data = req.params.data
 	const file = `data/${data}`
-	const m = data.match(/^(\w+)(?:=([\w\-]+))?$/)
-	if (m && existsSync(file)) {
+	if (existsSync(file)) {
 		res.type('text/javascript')
 		return res.sendFile(file, {root: __dirname})
 	}
-	if (m && m.length === 3) {
-		let [__, variable, package = variable] = m
-		let npm = `npm install ${package}`
-		spawnSync('/bin/bash', ['-c', npm])
-		let cmd = `echo '${variable} = require("${package}")' |node_modules/.bin/browserify - |tee ${file}`
-		appendFileSync('data/log.txt', `${cmd}\n`, 'utf8') 
-		let child = spawn('/bin/bash', ['-c', cmd])
-		res.type('text/javascript')
-		return child.stdio[1].pipe(res)
+	let packages = []
+	let variables = []
+	data.split(/\+/).forEach(module => {
+		const m = module.match(/^(\w+)(?:=([\w\-]+))?$/)
+		if (m && m.length === 3) {
+			let [__, variable, package = variable] = m
+			variables.push(`${variable} = require("${package}")`)
+			packages.push(package)
+		}
+	})
+	if (packages.length === 0) {
+		res.type('text/plain')
+		res.send(usage)
 	}
-	res.type('text/plain')
-	res.send(usage)
+	spawnSync('/bin/bash', ['-c', ['npm install', ...packages].join(' ')])
+	let cmd = `echo '${variables.join('\n')}' |node_modules/.bin/browserify - |tee ${file}`
+	appendFileSync('data/log.txt', `${cmd}\n`, 'utf8') 
+	let child = spawn('/bin/bash', ['-c', cmd])
+	res.type('text/javascript')
+	return child.stdio[1].pipe(res)
 })
 
 app.listen(port, () => {
