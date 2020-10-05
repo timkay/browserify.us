@@ -1,4 +1,4 @@
-Browserify any npm package.
+Browserify a list of npm packages.
 
 Example:
 
