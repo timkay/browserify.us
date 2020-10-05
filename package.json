@@ -1,0 +1,21 @@
+{
+  "name": "browserify.us",
+  "version": "1.0.0",
+  "description": "Browserify any npm package",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/timkay/browserify.us.git"
+  },
+  "dependencies": {
+    "bezier-js": "^2.6.1",
+    "browserify": "^16.5.2",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "@timkay",
+  "license": "UNLICENSED"
+}
