@@ -2,7 +2,7 @@
   "name": "browserify.us",
   "version": "1.0.0",
   "description": "Browserify any npm package",
-  "main": "index.js",
+  "main": "app.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/timkay/browserify.us.git"
