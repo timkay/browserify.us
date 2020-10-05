@@ -1,5 +1,5 @@
 
-const {appendFileSync, existsSync} = require('fs')
+const {mkdirSync, appendFileSync, existsSync} = require('fs')
 const {spawn, spawnSync} = require('child_process')
 
 const express = require('express')
@@ -8,9 +8,12 @@ const port = 80
 
 
 const usage = `Usage:
-		https://browserify.us/require/package-name
-		https://browserify.us/require/variable-name=npm-package-name
-	`
+	https://browserify.us/require/package-name
+	https://browserify.us/require/variable-name=npm-package-name
+`
+
+mkdirSync('data')
+
 
 app.get('/', (req, res) => {
 	res.type('text/plain')
