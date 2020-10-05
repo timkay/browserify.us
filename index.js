@@ -1,1 +1,0 @@
-Bezier = require('bezier-js');

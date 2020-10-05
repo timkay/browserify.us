@@ -1,30 +1,42 @@
 
-const {appendFileSync} = require('fs')
+const {appendFileSync, existsSync} = require('fs')
 const {spawn, spawnSync} = require('child_process')
 
 const express = require('express')
 const app = express()
 const port = 80
 
+
+const usage = `Usage:
+		https://browserify.us/require/package-name
+		https://browserify.us/require/variable-name=npm-package-name
+	`
+
 app.get('/', (req, res) => {
-	res.send('Hello World!')
+	res.type('text/plain')
+	res.send(usage)
 })
 
 app.get('/require/:data', (req, res) => {
 	const data = req.params.data
-	const m = data.match(/^(\w+)=([\w\-]+)$/)
-	if (m.length === 3) {
-		let npm = `npm install ${m[2]}`
+	const file = `data/${data}`
+	const m = data.match(/^(\w+)(?:=([\w\-]+))?$/)
+	if (m && existsSync(file)) {
+		res.type('text/javascript')
+		return res.sendFile(file, {root: __dirname})
+	}
+	if (m && m.length === 3) {
+		let [__, variable, package = variable] = m
+		let npm = `npm install ${package}`
 		spawnSync('/bin/bash', ['-c', npm])
-		let cmd = `echo '${m[1]} = require("${m[2]}")' |node_modules/.bin/browserify -`
+		let cmd = `echo '${variable} = require("${package}")' |node_modules/.bin/browserify - |tee ${file}`
 		appendFileSync('data/log.txt', `${cmd}\n`, 'utf8') 
 		let child = spawn('/bin/bash', ['-c', cmd])
 		res.type('text/javascript')
 		return child.stdio[1].pipe(res)
-		return res.send(cmd)
 	}
 	res.type('text/plain')
-	res.send(m.join('\n'))
+	res.send(usage)
 })
 
 app.listen(port, () => {
