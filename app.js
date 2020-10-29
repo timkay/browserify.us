@@ -33,11 +33,11 @@ app.get('/require/:data', (req, res) => {
 	let packages = []
 	let variables = []
 	data.split(/\+/).forEach(module => {
-		const m = module.match(/^(\w+)(?:=([\w\-]+))?$/)
-		if (m && m.length === 3) {
-			let [__, variable, package = variable] = m
+		const m = module.match(/^(\w+)(?:=([\w\-]+)(\@[\w\.]+)?)?$/)
+		if (m && m.length === 4) {
+			let [__, variable, package = variable, version] = m
 			variables.push(`${variable} = require("${package}")`)
-			packages.push(package)
+			packages.push(package + version)
 		}
 	})
 	if (packages.length === 0) {
