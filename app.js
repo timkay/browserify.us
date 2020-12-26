@@ -35,7 +35,7 @@ app.get('/require/:data', (req, res) => {
 	data.split(/\+/).forEach(module => {
 		const m = module.match(/^(\w+)(?:=([\w\-]+)(\@[\w\.]+)?)?$/)
 		if (m && m.length === 4) {
-			let [__, variable, package = variable, version] = m
+			let [__, variable, package = variable, version = ''] = m
 			variables.push(`${variable} = require("${package}")`)
 			packages.push(package + version)
 		}
