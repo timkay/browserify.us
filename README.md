@@ -3,6 +3,7 @@ Browserify a list of npm packages.
 To run, download Dockerfile, then
 
 ```
+# docker build
 # docker run -it -p 80:80 latest
 ```
 
