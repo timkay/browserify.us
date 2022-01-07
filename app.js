@@ -4,6 +4,7 @@ const {spawn, spawnSync} = require('child_process')
 const process = require('process')
 
 const express = require('express')
+const cors = require('cors')
 const app = express()
 const port = 80
 
@@ -18,6 +19,8 @@ try {
 } catch (e) {
 }
 
+
+app.use(cors())
 
 app.get('/', (req, res) => {
     res.type('text/plain')

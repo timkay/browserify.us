@@ -1,6 +1,5 @@
 FROM node:alpine
 WORKDIR /app
-COPY package.json .
-RUN npm install
+RUN npm install express cors browserify
 COPY app.js .
 ENTRYPOINT ["node", "app.js"]
