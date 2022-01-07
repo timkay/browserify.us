@@ -46,7 +46,7 @@ app.get('/require/:data', (req, res) => {
 	res.send(usage)
     }
     spawnSync('npm', ['install', ...packages])
-    let cmd = `echo '${variables.join('\n')}' |node_modules/.bin/browserify - |tee ${file}`
+    let cmd = `echo '${variables.join('\n')}' |node_modules/.bin/browserify --ignore-missing - |tee ${file}`
     appendFileSync('data/log.txt', `${cmd}\n`, 'utf8') 
     let child = spawn('/bin/ash', ['-c', cmd])
     res.type('text/javascript')
